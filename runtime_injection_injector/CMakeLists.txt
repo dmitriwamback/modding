@@ -3,4 +3,6 @@ project(runtime_injection_injector)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(runtime_injection_injector main.cpp)
+add_executable(runtime_injection_injector main.cpp
+        util/query_pid.h
+        util/payload.cpp)

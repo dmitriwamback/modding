@@ -1,0 +1,1 @@
+clang -dynamiclib util/payload.cpp -o payload/payload.dylib
