@@ -242,7 +242,7 @@ int main() {
         return -1;
     }
 
-    // Check the result of dlopen to determine if the dynamic library was successfully loaded in the target process. If dlopen returned NULL, it indicates that the dylib failed to load, and the injector provides suggestions for troubleshooting. If dlopen succeeded, it prints the handle returned by dlopen and indicates that the constructor in the dylib should have fired, prompting the user to check the target process's stdout for confirmation.
+    
     if (dlopenResult == 0) {
         std::cout << "dlopen returned NULL — dylib failed to load." << std::endl;
         std::cout << "Check: correct path? arm64 slice? codesigned? (`file payload.dylib`, `codesign -s - payload.dylib`)" << std::endl;
