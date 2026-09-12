@@ -3,7 +3,9 @@
 //
 
 #include <cstdio>
+#include <unistd.h>
 
-extern "C" void injected() {
-    printf("hello\n");
+__attribute__((constructor))
+static void injected() {
+    printf("hello %d\n", getpid());
 }
