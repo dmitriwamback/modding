@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <vector>
 #include <glm/glm.hpp>
+#include <GLFW/glfw3.h>
 #include <iostream>
 #include <thread>
 
@@ -14,6 +15,10 @@ struct Vertex {
     glm::vec3 vertex;
     glm::vec3 normal;
     glm::vec2 uv;
+};
+
+struct Shader {
+    uint32_t program;
 };
 
 struct Cube {
@@ -28,6 +33,8 @@ struct Cube {
 
 struct Renderer {
     std::vector<Cube> cubes;
+    Shader shader;
+    GLFWwindow* window;
 };
 
 struct Camera {
@@ -42,10 +49,13 @@ struct Camera {
     int mouseButton;
 };
 
+bool isPressed = false;
+
 __attribute__((constructor))
 static void injected() {
     printf("hello %d\n", getpid());
 
+    /*
     std::thread([]() {
         // Attempt to find the renderer object in the target process using dlsym. The mangled name "renderer" corresponds to the global variable "renderer" in the target process.
         Renderer* renderer = reinterpret_cast<Renderer*>(dlsym(RTLD_MAIN_ONLY, "renderer"));
@@ -67,9 +77,9 @@ static void injected() {
         while (true) {
             // Create a new cube object and initialize its properties based on the camera's position. The cube is positioned at the camera's location, with no rotation and a scale of 1.0 in all dimensions.
             Cube cube;
-            cube.position = camera->position;
+            cube.position = camera->position + glm::vec3(0.0f, -5.0f, 0.0f); // Position the cube slightly below the camera's position to avoid overlapping with the camera's view.
             cube.rotation = glm::vec3(rand() % 360, rand() % 360, rand() % 360); // Random rotation for visual variety
-            cube.scale = glm::vec3(rand() % 5 + 1, rand() % 5 + 1, rand() % 5 + 1);
+            cube.scale = glm::vec3(rand() % 2 + 1, rand() % 2 + 1, rand() % 2 + 1);
             cube.initialized = false;
             cube.vertexArrayObject = 0;
             cube.vertexBufferObject = 0;
@@ -77,6 +87,51 @@ static void injected() {
             // Add the newly created cube to the renderer's list of cubes. This allows the renderer to manage and render the cube in the target process.
             renderer->cubes.push_back(cube);
             sleep(5); // Sleep for 5 seconds before adding the next cube to avoid overwhelming the renderer with too many cubes at once.
+        }
+    }).detach();
+    */
+
+    std::thread([]() {
+
+        // Attempt to find the renderer object in the target process using dlsym. The mangled name "renderer" corresponds to the global variable "renderer" in the target process.
+        Renderer* renderer = reinterpret_cast<Renderer*>(dlsym(RTLD_MAIN_ONLY, "renderer"));
+
+        // Attempt to find the camera object in the target process using dlsym. The mangled name "_ZN8Renderer6cameraE" corresponds to the member variable "camera" of the "Renderer" class.
+        // To get the correct mangled name, you can use the command: `nm target_name | grep camera`.
+        Camera* camera = reinterpret_cast<Camera*>(dlsym(RTLD_MAIN_ONLY, "_ZN8Renderer6cameraE"));
+
+        // Check if the renderer and camera objects were found successfully. If not, print an error message and return early.
+        if (!renderer) {
+            std::cout << "renderer not found" << std::endl;
+            return;
+        }
+        if (!camera) {
+            std::cout << "camera not found" << std::endl;
+            return;
+        }
+
+        while (true) {
+
+            int state = glfwGetKey(renderer->window, GLFW_KEY_SPACE);
+
+            if (state == GLFW_PRESS && !isPressed) {
+                Cube cube;
+                cube.position = camera->position;
+                cube.rotation = glm::vec3(rand() % 360, rand() % 360, rand() % 360); // Random rotation for visual variety
+                cube.scale = glm::vec3(rand() % 2 + 1, rand() % 2 + 1, rand() % 2 + 1);
+                cube.initialized = false;
+                cube.vertexArrayObject = 0;
+                cube.vertexBufferObject = 0;
+
+                // Add the newly created cube to the renderer's list of cubes. This allows the renderer to manage and render the cube in the target process.
+                renderer->cubes.push_back(cube);
+                isPressed = true;
+            }
+            else if (state == GLFW_RELEASE) {
+                isPressed = false;
+            }
+
+            usleep(10000); // Sleep for 10 milliseconds before updating the next frame to control the update rate and avoid excessive CPU usage.
         }
     }).detach();
 }
