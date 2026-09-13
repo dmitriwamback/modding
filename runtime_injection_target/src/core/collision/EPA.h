@@ -1,0 +1,13 @@
+//
+// Created by Dmitri on 2026-09-13.
+//
+
+#ifndef RUNTIME_INJECTION_TARGET_EPA_H
+#define RUNTIME_INJECTION_TARGET_EPA_H
+
+
+class EPA {
+};
+
+
+#endif //RUNTIME_INJECTION_TARGET_EPA_H

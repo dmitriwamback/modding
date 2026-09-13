@@ -1,14 +1,9 @@
-#include <cstdio>
-#include <thread>
-#include <chrono>
+#include "src/core/scene/Renderer.h"
 
-int i = 0;
+Renderer renderer;
 
 int main() {
-
-    while (true) {
-        printf("hi%d\n", i);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        i++;
-    }
+    renderer = Renderer();
+    renderer.Initialize();
+    renderer.Loop();
 }

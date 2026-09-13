@@ -1,1 +1,3 @@
-clang -dynamiclib util/payload.cpp -o payload/payload.dylib
+clang++ -dynamiclib util/payload.cpp \
+    -I/opt/homebrew/include \
+    -o payload/payload.dylib
