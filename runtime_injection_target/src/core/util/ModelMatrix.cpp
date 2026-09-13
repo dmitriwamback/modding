@@ -15,5 +15,5 @@ glm::mat4 ModelMatrix::CreateModelMatrix(const glm::vec3 &positionVec, const glm
     glm::mat4 scale = glm::scale(glm::mat4(1.0f), scaleVec);
     glm::mat4 rotation = MathUtil::CreateRotationMatrix(rotationVec);
 
-    return position * scale * rotation;
+    return position * rotation * scale;
 }

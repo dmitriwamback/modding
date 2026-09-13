@@ -68,8 +68,8 @@ static void injected() {
             // Create a new cube object and initialize its properties based on the camera's position. The cube is positioned at the camera's location, with no rotation and a scale of 1.0 in all dimensions.
             Cube cube;
             cube.position = camera->position;
-            cube.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-            cube.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+            cube.rotation = glm::vec3(rand() % 360, rand() % 360, rand() % 360); // Random rotation for visual variety
+            cube.scale = glm::vec3(rand() % 5 + 1, rand() % 5 + 1, rand() % 5 + 1);
             cube.initialized = false;
             cube.vertexArrayObject = 0;
             cube.vertexBufferObject = 0;
