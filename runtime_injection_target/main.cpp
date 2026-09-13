@@ -2,8 +2,9 @@
 #include <thread>
 #include <chrono>
 
+int i = 0;
+
 int main() {
-    int i = 0;
 
     while (true) {
         printf("hi%d\n", i);
