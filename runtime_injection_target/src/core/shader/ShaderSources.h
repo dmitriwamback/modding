@@ -23,7 +23,7 @@ public:
         out vec3 fragp;
 
         void main() {
-            normal = (model * vec4(inNormal, 1.0)).xyz;
+            normal = transpose(inverse(mat3(model))) * inNormal;
             fragp = (model * vec4(position, 1.0)).xyz;
             gl_Position = projection * lookAt * vec4(fragp, 1.0);
         }
@@ -35,10 +35,18 @@ public:
         in vec3 normal;
         in vec3 fragp;
 
-        out vec4 col;
+        out vec4 fragc;
+        vec3 lightPosition = vec3(10000.0, 30000.0, 20000.0);
+        vec3 color = vec3(1.0);
 
         void main() {
-            col = vec4(1.0);
+            vec3 lightDir = normalize(lightPosition - fragp);
+            float diff = max(dot(normal, lightDir), 0.0);
+            vec3 diffuse = vec3(1.0) * diff;
+
+            vec3 ambient = color * 0.2;
+
+            fragc = vec4(diffuse + ambient, 1.0);
         }
 )";
 };
