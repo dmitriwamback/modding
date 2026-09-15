@@ -20,6 +20,7 @@ public:
 
     void Initialize();
     void Render(Shader& shader);
+    std::vector<Vertex> ProjectedVertices();
 
 private:
     uint32_t vertexArrayObject = 0;

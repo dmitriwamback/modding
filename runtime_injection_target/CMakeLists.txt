@@ -22,7 +22,10 @@ add_executable(runtime_injection_target main.cpp
         src/core/collision/GJK.h
         src/core/collision/EPA.cpp
         src/core/collision/EPA.h
-        src/core/objects/Vertex.h)
+        src/core/objects/Vertex.h
+        src/core/collision/Simplex.cpp
+        src/core/collision/Simplex.h
+        src/core/collision/Support.h)
 
 find_package(glfw3 REQUIRED)
 find_package(GLEW REQUIRED)

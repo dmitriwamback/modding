@@ -188,7 +188,7 @@ int main() {
 
     // Allocate a stack for the new thread that will run the bootstrap shellcode in the target process
     mach_vm_address_t remoteStackAddr = 0; // Address of the allocated stack in the target process
-    size_t stackSize = 16 * 1024; // Allocate 16 KB for the stack of the new thread
+    size_t stackSize = 512 * 1024; // Allocate 512 KB for the stack of the new thread
 
     // Allocate memory for the stack in the target process
     kr = mach_vm_allocate(task, &remoteStackAddr, stackSize, VM_FLAGS_ANYWHERE);

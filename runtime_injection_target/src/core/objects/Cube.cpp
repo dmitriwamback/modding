@@ -87,3 +87,21 @@ void Cube::Render(Shader &shader) {
 
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
+
+std::vector<Vertex> Cube::ProjectedVertices() {
+    glm::mat4 model = ModelMatrix::CreateModelMatrix(position, rotation, scale);
+    std::vector<Vertex> projectedVertices;
+
+    for (Vertex v : vertices) {
+        glm::vec3 pV = glm::vec3(model * glm::vec4(v.vertex, 1.0f));
+        glm::vec3 pN = glm::normalize(glm::vec3(glm::transpose(glm::inverse(model)) * glm::vec4(v.normal, 1.0f)));
+
+        Vertex newVertex{};
+        newVertex.vertex = pV;
+        newVertex.normal = pN;
+        newVertex.uv = glm::vec2(0.0f);
+        projectedVertices.push_back(newVertex);
+    }
+
+    return projectedVertices;
+}
